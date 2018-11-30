@@ -20,7 +20,19 @@ class PhotoViewImageWrapper extends StatefulWidget {
   })  : customChild = null,
         super(key: key);
 
-  const PhotoViewImageWrapper.customChild({
+//  const PhotoViewImageWrapper.customChild(Key key, @required this.customChild,@required this.setNextScaleState,
+//      @required this.onStartPanning,
+//      @required this.childSize,
+//      @required this.scaleState,
+//      @required this.scaleBoundaries,
+//      @required this.size,
+//      this.backgroundDecoration,
+//      this.heroTag,
+//      this.enableRotation): imageProvider = null,
+//        gaplessPlayback = false,
+//        super(key: key);
+
+  const PhotoViewImageWrapper.customChildNew({
     Key key,
     @required this.customChild,
     @required this.setNextScaleState,
@@ -110,7 +122,7 @@ class _PhotoViewImageWrapperState extends State<PhotoViewImageWrapper>
     setState(() {
       _scale = newScale;
       _position = clampPosition(delta * details.scale);
-      _rotation = _rotationBefore + details.rotation;
+      _rotation = _rotationBefore ;//+ details.rotation;
       _rotationFocusPoint = details.focalPoint;
     });
   }

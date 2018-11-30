@@ -6,10 +6,12 @@ import 'package:photo_view/src/photo_view_computed_scale.dart';
 import 'package:photo_view/src/photo_view_image_wrapper.dart';
 import 'package:photo_view/src/photo_view_scale_boundaries.dart';
 import 'package:photo_view/src/photo_view_scale_state.dart';
-import 'package:after_layout/after_layout.dart';
+
+import 'package:photo_view/src/f_after_layout.dart';
 
 export 'package:photo_view/src/photo_view_computed_scale.dart';
 export 'package:photo_view/src/photo_view_scale_state.dart';
+
 
 /// A type definition for a [Function] that receives a [PhotoViewScaleState]
 ///
@@ -202,8 +204,9 @@ class PhotoView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _PhotoViewState();
+    return new _PhotoViewState();
   }
+
 }
 
 class _PhotoViewState extends State<PhotoView>
@@ -277,7 +280,7 @@ class _PhotoViewState extends State<PhotoView>
   }
 
   Widget _buildCustomChild(BuildContext context) {
-    return PhotoViewImageWrapper.customChild(
+    return PhotoViewImageWrapper.customChildNew(
       customChild: widget.child,
       setNextScaleState: setNextScaleState,
       onStartPanning: onStartPanning,
