@@ -339,7 +339,7 @@ class _PhotoViewImageWrapperState extends State<PhotoViewImageWrapper>
         ? Image(
             image: widget.imageProvider,
             gaplessPlayback: widget.gaplessPlayback,
-            fit: BoxFit.cover,
+            fit: BoxFit.fitWidth,
             alignment: Alignment.center,
           )
         : widget.customChild;
