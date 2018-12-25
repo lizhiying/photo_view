@@ -222,9 +222,13 @@ class _PhotoViewState extends State<PhotoView>
     final listener = (ImageInfo info, bool synchronousCall) {
       if (!completer.isCompleted) {
         completer.complete(info);
-        setState(() {
+        if(this.mounted){
+          setState(() {
+            _childSize = Size(info.image.width / 1, info.image.height / 1);
+          });
+        } else {
           _childSize = Size(info.image.width / 1, info.image.height / 1);
-        });
+        }
       }
     };
     stream.addListener(listener);
