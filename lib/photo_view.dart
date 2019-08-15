@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:photo_view/src/photo_view_computed_scale.dart';
 import 'package:photo_view/src/photo_view_image_wrapper.dart';
+import 'package:photo_view/src/photo_view_image_wrapper_topleft.dart';
 import 'package:photo_view/src/photo_view_scale_boundaries.dart';
 import 'package:photo_view/src/photo_view_scale_state.dart';
 
@@ -125,6 +126,7 @@ class PhotoView extends StatefulWidget {
     this.heroTag,
     this.scaleStateChangedCallback,
     this.enableRotation = false,
+    this.isTopLeft = false,
   })  : child = null,
         childSize = null,
         super(key: key);
@@ -147,6 +149,7 @@ class PhotoView extends StatefulWidget {
     this.heroTag,
     this.scaleStateChangedCallback,
     this.enableRotation = false,
+    this.isTopLeft = false,
   })  : loadingChild = null,
         imageProvider = null,
         gaplessPlayback = false,
@@ -182,6 +185,10 @@ class PhotoView extends StatefulWidget {
   /// nothing (`false`), when the `imageProvider` changes. By default it's set
   /// to `false`.
   final bool gaplessPlayback;
+
+
+  // is or not display top left on parent widget
+  final bool isTopLeft;
 
   /// Defines the size of the scaling base of the image inside [PhotoView],
   /// by default it is `MediaQuery.of(context).size`.
@@ -231,9 +238,10 @@ class _PhotoViewState extends State<PhotoView>
         }
       }
     };
-    stream.addListener(listener);
+    ImageStreamListener streamListener=ImageStreamListener(listener);
+    stream.addListener(streamListener);
     completer.future.then((_) {
-      stream.removeListener(listener);
+      stream.removeListener(streamListener);
     });
     return completer.future;
   }
@@ -284,24 +292,45 @@ class _PhotoViewState extends State<PhotoView>
   }
 
   Widget _buildCustomChild(BuildContext context) {
-    return PhotoViewImageWrapper.customChildNew(
-      customChild: widget.child,
-      setNextScaleState: setNextScaleState,
-      onStartPanning: onStartPanning,
-      childSize: _childSize,
-      scaleState: _scaleState,
-      backgroundDecoration: widget.backgroundDecoration,
-      size: _computedSize,
-      enableRotation: widget.enableRotation,
-      scaleBoundaries: ScaleBoundaries(
-        widget.minScale ?? 0.0,
-        widget.maxScale ?? double.infinity,
-        widget.initialScale ?? PhotoViewComputedScale.contained,
+    if(widget.isTopLeft){
+      return PhotoViewImageWrapperTopLeft.customChildNew(
+        customChild: widget.child,
+        setNextScaleState: setNextScaleState,
+        onStartPanning: onStartPanning,
         childSize: _childSize,
+        scaleState: _scaleState,
+        backgroundDecoration: widget.backgroundDecoration,
         size: _computedSize,
-      ),
-      heroTag: widget.heroTag,
-    );
+        enableRotation: widget.enableRotation,
+        scaleBoundaries: ScaleBoundaries(
+          widget.minScale ?? 0.0,
+          widget.maxScale ?? double.infinity,
+          widget.initialScale ?? PhotoViewComputedScale.contained,
+          childSize: _childSize,
+          size: _computedSize,
+        ),
+        heroTag: widget.heroTag,
+      );
+    }else{
+      return PhotoViewImageWrapper.customChildNew(
+        customChild: widget.child,
+        setNextScaleState: setNextScaleState,
+        onStartPanning: onStartPanning,
+        childSize: _childSize,
+        scaleState: _scaleState,
+        backgroundDecoration: widget.backgroundDecoration,
+        size: _computedSize,
+        enableRotation: widget.enableRotation,
+        scaleBoundaries: ScaleBoundaries(
+          widget.minScale ?? 0.0,
+          widget.maxScale ?? double.infinity,
+          widget.initialScale ?? PhotoViewComputedScale.contained,
+          childSize: _childSize,
+          size: _computedSize,
+        ),
+        heroTag: widget.heroTag,
+      );
+    }
   }
 
   Widget _buildImage(BuildContext context) {
@@ -330,25 +359,47 @@ class _PhotoViewState extends State<PhotoView>
   }
 
   Widget _buildWrapperImage(BuildContext context) {
-    return PhotoViewImageWrapper(
-      setNextScaleState: setNextScaleState,
-      onStartPanning: onStartPanning,
-      imageProvider: widget.imageProvider,
-      childSize: _childSize,
-      scaleState: _scaleState,
-      backgroundDecoration: widget.backgroundDecoration,
-      gaplessPlayback: widget.gaplessPlayback,
-      size: _computedSize,
-      enableRotation: widget.enableRotation,
-      scaleBoundaries: ScaleBoundaries(
-        widget.minScale ?? 0.0,
-        widget.maxScale ?? double.infinity,
-        widget.initialScale ?? PhotoViewComputedScale.contained,
+    if(widget.isTopLeft){
+      return PhotoViewImageWrapperTopLeft(
+        setNextScaleState: setNextScaleState,
+        onStartPanning: onStartPanning,
+        imageProvider: widget.imageProvider,
         childSize: _childSize,
+        scaleState: _scaleState,
+        backgroundDecoration: widget.backgroundDecoration,
+        gaplessPlayback: widget.gaplessPlayback,
         size: _computedSize,
-      ),
-      heroTag: widget.heroTag,
-    );
+        enableRotation: widget.enableRotation,
+        scaleBoundaries: ScaleBoundaries(
+          widget.minScale ?? 0.0,
+          widget.maxScale ?? double.infinity,
+          widget.initialScale ?? PhotoViewComputedScale.contained,
+          childSize: _childSize,
+          size: _computedSize,
+        ),
+        heroTag: widget.heroTag,
+      );
+    }else{
+      return PhotoViewImageWrapper(
+        setNextScaleState: setNextScaleState,
+        onStartPanning: onStartPanning,
+        imageProvider: widget.imageProvider,
+        childSize: _childSize,
+        scaleState: _scaleState,
+        backgroundDecoration: widget.backgroundDecoration,
+        gaplessPlayback: widget.gaplessPlayback,
+        size: _computedSize,
+        enableRotation: widget.enableRotation,
+        scaleBoundaries: ScaleBoundaries(
+          widget.minScale ?? 0.0,
+          widget.maxScale ?? double.infinity,
+          widget.initialScale ?? PhotoViewComputedScale.contained,
+          childSize: _childSize,
+          size: _computedSize,
+        ),
+        heroTag: widget.heroTag,
+      );
+    }
   }
 
   Widget _buildLoading() {
