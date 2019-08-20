@@ -292,9 +292,8 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
   @override
   Widget build(BuildContext context) {
     final matrix = Matrix4.identity()
-      ..translate(_position.dx, _position.dy)
+      ..translate(_position.dx, 0)
       ..scale(scaleStateAwareScale());
-    print("_position.dx=${_position.dx}+_position.dy=${_position.dy}");
     final rotationMatrix = Matrix4.identity()..rotateZ(_rotation);
 
     final Widget customChildLayout = CustomSingleChildLayout(
@@ -302,7 +301,6 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
           widget.childSize.width, widget.childSize.height),
       child: _buildHero(),
     );
-    print("widget.enableRotation == ${widget.enableRotation}");
     return GestureDetector(
       child: Container(
         child: Center(
@@ -329,14 +327,12 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
   }
 
   Widget _buildHero() {
-    print("widget.heroTag == ${widget.heroTag}");
     return widget.heroTag != null
         ? Hero(tag: widget.heroTag, child: _buildChild())
         : _buildChild();
   }
 
   Widget _buildChild() {
-    print("widget.customChild == ${widget.customChild}");
     return widget.customChild == null
         ? Image(
       image: widget.imageProvider,
@@ -356,8 +352,7 @@ class _ImagePositionDelegate extends SingleChildLayoutDelegate {
   @override
   Offset getPositionForChild(Size size, Size childSize) {
     final double offsetX = (size.width - imageWidth) / 2;
-    final double offsetY = (size.height - imageHeight) / 2;
-    print("size.width=${size.width}+size.height=${size.height}+imageWidth=$imageWidth+imageHeight=$imageHeight");
+//    final double offsetY = (size.height - imageHeight) / 2;
     return Offset(offsetX,0);
   }
 
