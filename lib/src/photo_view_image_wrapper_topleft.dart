@@ -184,6 +184,7 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
   }
 
   double scaleStateAwareScale() {
+    print("scaleStateAwareScale");
     return _scale != null || widget.scaleState == PhotoViewScaleState.zooming
         ? _scale
         : getScaleForScaleState(widget.size, widget.scaleState,
@@ -191,6 +192,7 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
   }
 
   void animateScale(double from, double to) {
+    print("animateScale");
     _scaleAnimation = Tween<double>(
       begin: from,
       end: to,
@@ -291,6 +293,7 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
 
   @override
   Widget build(BuildContext context) {
+    double pixelRation=MediaQuery.of(context).devicePixelRatio;
     final matrix = Matrix4.identity()
       ..translate(_position.dx, _position.dy)
       ..scale(scaleStateAwareScale());
@@ -298,7 +301,7 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
 
     final Widget customChildLayout = CustomSingleChildLayout(
       delegate: _ImagePositionDelegate(
-          widget.childSize.width, widget.childSize.height),
+          widget.childSize.width, widget.childSize.height,pixelRation),
       child: _buildHero(),
     );
     return GestureDetector(
@@ -346,14 +349,16 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
 }
 
 class _ImagePositionDelegate extends SingleChildLayoutDelegate {
-  const _ImagePositionDelegate(this.imageWidth, this.imageHeight);
+  const _ImagePositionDelegate(this.imageWidth, this.imageHeight,this.pixelRation);
 
   final double imageWidth;
   final double imageHeight;
+  final double pixelRation;
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
     final double offsetX = (size.width - imageWidth) / 2;
+    final double offsetY = (size.height - imageHeight) / 2;
     return Offset(offsetX,0);
   }
 

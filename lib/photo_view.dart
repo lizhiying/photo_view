@@ -225,7 +225,7 @@ class _PhotoViewState extends State<PhotoView>
   Future<ImageInfo> _getImage() {
     final Completer completer = Completer<ImageInfo>();
     final ImageStream stream =
-        widget.imageProvider.resolve(const ImageConfiguration());
+    widget.imageProvider.resolve(const ImageConfiguration());
     final listener = (ImageInfo info, bool synchronousCall) {
       if (!completer.isCompleted) {
         completer.complete(info);
@@ -406,12 +406,12 @@ class _PhotoViewState extends State<PhotoView>
     return widget.loadingChild != null
         ? widget.loadingChild
         : Center(
-            child: Container(
-              width: 20.0,
-              height: 20.0,
-              child: const CircularProgressIndicator(),
-            ),
-          );
+      child: Container(
+        width: 20.0,
+        height: 20.0,
+        child: const CircularProgressIndicator(),
+      ),
+    );
   }
 
   Size get _computedSize =>
@@ -435,15 +435,15 @@ class PhotoViewInline extends PhotoView {
     Object heroTag,
     PhotoViewScaleStateChangedCallback scaleStateChangedCallback,
   }) : super(
-            key: key,
-            imageProvider: imageProvider,
-            loadingChild: loadingChild,
-            backgroundDecoration: backgroundDecoration,
-            minScale: minScale,
-            maxScale: maxScale,
-            initialScale: initialScale,
-            gaplessPlayback: gaplessPlayback,
-            customSize: size,
-            heroTag: heroTag,
-            scaleStateChangedCallback: scaleStateChangedCallback);
+      key: key,
+      imageProvider: imageProvider,
+      loadingChild: loadingChild,
+      backgroundDecoration: backgroundDecoration,
+      minScale: minScale,
+      maxScale: maxScale,
+      initialScale: initialScale,
+      gaplessPlayback: gaplessPlayback,
+      customSize: size,
+      heroTag: heroTag,
+      scaleStateChangedCallback: scaleStateChangedCallback);
 }
