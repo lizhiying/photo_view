@@ -3,6 +3,7 @@ import 'package:photo_view/src/photo_view_scale_boundaries.dart';
 import 'package:photo_view/src/photo_view_scale_state.dart';
 import 'package:photo_view/src/photo_view_utils.dart';
 
+
 class PhotoViewImageWrapperTopLeft extends StatefulWidget {
   const PhotoViewImageWrapperTopLeft({
     Key key,
@@ -176,8 +177,7 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
         : 0.0;
 
     final double computedY = screenHeight < computedHeight
-        ? y.clamp(0 - (computedHeight / 2) + screenHalfY,
-        computedHeight / 2 - screenHalfY)
+        ? y.clamp(screenHeight  - computedHeight,0.0)
         : 0.0;
 
     return Offset(computedX, computedY);
@@ -292,7 +292,7 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
   @override
   Widget build(BuildContext context) {
     final matrix = Matrix4.identity()
-      ..translate(_position.dx, 0)
+      ..translate(_position.dx, _position.dy)
       ..scale(scaleStateAwareScale());
     final rotationMatrix = Matrix4.identity()..rotateZ(_rotation);
 
@@ -305,16 +305,18 @@ class _PhotoViewImageWrapperTopLeftState extends State<PhotoViewImageWrapperTopL
       child: Container(
         child: Center(
             child: Transform(
-              child: widget.enableRotation
-                  ? Transform(
-                child: customChildLayout,
-                transform: rotationMatrix,
-                alignment: Alignment.center,
-                origin: _rotationFocusPoint,
-              )
-                  : customChildLayout,
-              transform: matrix,
-              alignment: Alignment.topCenter,
+                child: widget.enableRotation
+                    ? Transform(
+                  child: customChildLayout,
+                  transform: rotationMatrix,
+                  alignment: Alignment.center,
+                  origin: _rotationFocusPoint,
+                )
+                    : Container(
+                  child: customChildLayout,
+                ),
+                transform: matrix,
+                alignment: Alignment.topCenter
             )),
         decoration: widget.backgroundDecoration ??
             const BoxDecoration(color: const Color.fromRGBO(0, 0, 0, 1.0)),
@@ -352,7 +354,6 @@ class _ImagePositionDelegate extends SingleChildLayoutDelegate {
   @override
   Offset getPositionForChild(Size size, Size childSize) {
     final double offsetX = (size.width - imageWidth) / 2;
-//    final double offsetY = (size.height - imageHeight) / 2;
     return Offset(offsetX,0);
   }
 
